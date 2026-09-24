@@ -14,14 +14,13 @@ export default {
 
     const lat = Number(url.searchParams.get('lat'));
     const lon = Number(url.searchParams.get('lon'));
-    const radiusM = Math.max(300, Math.min(2000, Number(url.searchParams.get('radius') || 1000)));
+    const radiusM = Math.max(1000, Math.min(10000, Number(url.searchParams.get('radius') || 1000)));
     const meal = url.searchParams.get('meal') || '점심';
     const genre = url.searchParams.get('genre') || '';
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) return Response.json({error:'invalid coordinates'},{status:400,headers:cors});
 
     const keywords = genre ? [genre] : (meal === '커피' ? ['카페','커피'] : ['음식점','한식','일식','중식','분식','고기']);
     const found = new Map();
-
     for (const kw of keywords) {
       const api = new URL('https://apis.openapi.sk.com/tmap/pois');
       api.searchParams.set('version','1');
